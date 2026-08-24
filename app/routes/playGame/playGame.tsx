@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import type { Data } from "~/types/data";
 import WinGame from "../winGame/winGame";
+import { usePantomimeStore } from "~/stores/gameData";
 
 
 const WORD_BANK = [
@@ -33,17 +34,16 @@ const PlayGame = ({
   data,
   round,
   duration,
-  score,
-  setScore,
   children,
 }: {
   data: Data[];
   round: number;
   duration: number;
-  score: number;
-  setScore: (value: number) => void;
   children: React.ReactNode
-}) => {
+  }) => {
+
+  const score = usePantomimeStore((s) => s.data[currentTeam].score);
+
   const [currentTeam, setCurrentTeam] = useState(0);
   const [currentRound, setCurrentRound] = useState(0);
 
@@ -117,7 +117,6 @@ const PlayGame = ({
 
   const nextWordCurrect = () => {
     setWordIndex(wordIndex + 1);
-    setScore(score + 1);
     data[currentTeam].score = data[currentTeam]?.score + 1;
     console.log(data[currentTeam]);
   };

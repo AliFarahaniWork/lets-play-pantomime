@@ -3,31 +3,28 @@ import type { Data } from "../types/data";
 import lodash from "lodash";
 import PlayGame from "../routes/playGame/playGame";
 import { Link } from "react-router";
+import { usePantomimeStore } from "~/stores/gameData";
 
 
 
 const PageSetup = () => {
-  const [teamName, setTeamName] = useState("");
-  const [plyerName, setTPalyerName] = useState("");
+
+  const data = usePantomimeStore((s) => s.data);
+  const setTeamName = usePantomimeStore((s) => s.setTeamName);
+  const teamName = usePantomimeStore((s) => s.teamName);
+
+  const playerName = usePantomimeStore((s) => s.playerName);
+  const setPlayerName = usePantomimeStore((s) => s.setPlayerName);
+  const addTeam = usePantomimeStore((s) => s.addTeam);
+  const addPlayerName = usePantomimeStore((s) => s.addPlayerName);
+  console.log(data);
+
   const [round, setRound] = useState<number>(0);
   const [duration, setDuration] = useState(0);
-  const [data, setData] = useState<any>([]);
   const [score, setScore] = useState(0);
 
-  const addTeam = () => {
-    const team = {
-      teamName: teamName,
-      playerName: [],
-      score: score,
-    };
-    setData([...data, team]);
-  };
 
-  const addPlayerName = (i: any) => {
-    const players = [...data];
-    players[i].playerName.push(plyerName);
-    setData(players);
-  };
+
 
   return (
     <div className="mx-auto text-center">
@@ -38,10 +35,9 @@ const PageSetup = () => {
         value={teamName}
         onChange={(e) => setTeamName(e.target.value)}
       />
-      <button className="button" onClick={addTeam}>
+      <button className="button" onClick={() => addTeam(teamName)}>
         set team name
       </button>
-
       <div className="flex flex-row gap-1.5 ">
         {data.map((team: Data, indexTeam: number) => {
           return (
@@ -65,12 +61,12 @@ const PageSetup = () => {
                   <input
                     className="border"
                     placeholder="Player Name"
-                    value={plyerName}
-                    onChange={(e) => setTPalyerName(e.target.value)}
+                    value={playerName}
+                    onChange={(e) => addPlayerName(e.target.value)}
                   />
                   <button
                     className="border hover:bg-white hover:text-black hover:border-white"
-                    onClick={() => addPlayerName(indexTeam)}
+                    onClick={() => addPlayerName(indexTeam, playerName)}
                   >
                     Player Name
                   </button>
@@ -169,13 +165,6 @@ const PageSetup = () => {
         </button>
       </div>
 
-        <PlayGame
-          data={data}
-          round={round}
-          duration={duration}
-          score={score}
-          setScore={setScore}
-      >
       <Link
         className={`px-5 mx-2 border border-gray-400 ${
           duration && round && data[1]?.playerName[0]
@@ -187,25 +176,8 @@ const PageSetup = () => {
         Start Game
       </Link>
 
-
-        </PlayGame>
     </div>
   );
 };
 
 export default PageSetup;
-
-[
-  {
-    teamName: "team a",
-    playerName: ["player a", "player a", "player a", "player a", "player a"],
-  },
-  {
-    teamName: "team b",
-    playerName: ["player b", "player b", "player b", "player b"],
-  },
-  {
-    teamName: "team c ",
-    playerName: ["player c", "player c", "player c", "player c", "player c"],
-  },
-];
