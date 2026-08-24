@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import type { Data, WordBank } from "~/types/data";
+import type { PlayGameStore } from "~/types/playGameType";
+
 
 const WORD_BANK = [
   {
@@ -165,60 +166,38 @@ const WORD_BANK = [
   },
 ];
 
-type PantomimeStore = {
-  words: WordBank[];
-  teamName: string;
-  playerName: string;
-  data: Data[];
-  setTeamName: (value: string) => void;
-  setPlayerName: (value: string) => void;
-  addTeam: (teamName: string) => void;
-  addPlayer: (index: number, playerName: string) => void;
-  round: number;
-  setRound: (value: number) => void
-  time: number;
-  setTime: (value: number) => void
-  score: number;
-  setScore: (value : number) => void
-};
-export const usePantomimeStore = create<PantomimeStore>((set) => ({
+
+export const usePlayGameStore = create<PlayGameStore>((set) => ({
   words: WORD_BANK,
-  teamName: "",
-  playerName: "",
-  data: [],
-  round: 0,
-  time: 0,
   score: 0,
-  setTeamName: (value) => {
-    set({ teamName: value });
+  currentTeam: 0,
+  currentRound: 0,
+  playerChoice: 0,
+  wordIndex: 0,
+  gameStarted: false,
+  gameTime: 0,
+  setScore: (value) => {set({ score: value });},
+  setCurrentTeam: (value) => {
+    set({ currentTeam: value });
   },
-  setPlayerName: (value) => {
-    set({ playerName: value });
+  setCurrentRound: (value) => {
+    set({ currentRound: value });
   },
-  addTeam: (teamName) => {
-    const team = {
-      teamName,
-      playerName: [],
-      score: 0,
-    };
+  setPlayerChoice: (value) => {
+    set({ playerChoice: value });
+  },
+  setWordIndex: (value) => {
+    set({ wordIndex: value });
+  },
+  setGameStarted: (value) => {
+    set({ gameStarted: value });
+  },
+  setGameTime: (value) => {
     set((state) => ({
-      data: [...state.data, team],
+      gameTime:
+        typeof value === 'function'
+          ? (value as (prev: number) => number)(state.gameTime)
+          :value
     }));
   },
-  addPlayer: (index, playerName) => {
-    set((state) => {
-      const players = [...state.data];
-      players[index].playerName.push(playerName);
-      return {
-        data: players,
-      };
-    });
-  },
-  setRound: (value) => {
-    set({ round: value });
-  },
-  setTime: (value) => {
-    set({ time: value });
-  },
-  setScore:(value) => {}
 }));

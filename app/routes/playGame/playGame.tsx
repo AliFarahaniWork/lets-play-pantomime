@@ -1,9 +1,8 @@
-
 import React, { useEffect, useState } from "react";
-import type { Data } from "~/types/data";
+import type { Data } from "~/types/generalType";
 import WinGame from "../winGame/winGame";
-import { usePantomimeStore } from "~/stores/gameData";
-
+import { usePageSetupStore } from "~/stores/pageSetupStore";
+import { usePlayGameStore } from "~/stores/playGameStore";
 
 const WORD_BANK = [
   {
@@ -30,28 +29,37 @@ const WORD_BANK = [
   },
 ];
 
-const PlayGame = ({
-  data,
-  round,
-  duration,
-  children,
-}: {
-  data: Data[];
-  round: number;
-  duration: number;
-  children: React.ReactNode
-  }) => {
+const PlayGame = () => {
+  //Main Data
+  const data = usePageSetupStore((s) => s.data);
+  const words = usePlayGameStore((s) => s.words);
 
-  const score = usePantomimeStore((s) => s.data[currentTeam].score);
+  //Round detail
+  const round = usePageSetupStore((s) => s.round);
 
-  const [currentTeam, setCurrentTeam] = useState(0);
-  const [currentRound, setCurrentRound] = useState(0);
+  //Time detail
+  const time = usePageSetupStore((s) => s.time);
 
-  const [playerChoice, setPlayerChoice] = useState(0);
+  //Index detail
+  const currentTeam = usePlayGameStore((s) => s.currentTeam);
+  const setCurrentTeam = usePlayGameStore((s) => s.setCurrentTeam);
 
-  const [gameTime, setGameTime] = useState(duration);
-  const [gameStarted, setGameStarted] = useState(false);
-  const [wordIndex, setWordIndex] = useState(0);
+  const currentRound = usePlayGameStore((s) => s.currentRound);
+  const setCurrentRound = usePlayGameStore((s) => s.setCurrentRound);
+
+  const playerChoice = usePlayGameStore((s) => s.playerChoice);
+  const setPlayerChoice = usePlayGameStore((s) => s.setPlayerChoice);
+
+  const wordIndex = usePlayGameStore((s) => s.wordIndex);
+  const setWordIndex = usePlayGameStore((s) => s.setWordIndex);
+
+  const gameStarted = usePlayGameStore((s) => s.gameStarted);
+  const setGameStarted = usePlayGameStore((s) => s.setGameStarted);
+
+
+  const gameTime = usePlayGameStore((s) => s.gameTime);
+  const setGameTime = usePlayGameStore((s) => s.setGameTime);
+
 
   const choicePlayer = (index: number) => {
     return (
@@ -86,7 +94,7 @@ const PlayGame = ({
       }
       setPlayerChoice(0);
       setGameStarted(false);
-      setGameTime(duration);
+      setGameTime(time);
     };
     if (gameStarted && gameTime === 0) {
       nextTurn();
@@ -94,18 +102,18 @@ const PlayGame = ({
   }, [gameTime, gameStarted]);
 
   useEffect(() => {
-    setGameTime(duration);
-  }, [duration]);
+    setGameTime(time);
+  }, [time]);
 
   useEffect(() => {
     if (gameStarted) {
       const intervalId = setInterval(() => {
-        setGameTime((previousTime) => {
+        setGameTime((previousTime : number) => {
           if (previousTime > 0) {
             return previousTime - 1;
           }
 
-          return duration;
+          return time;
         });
       }, 100);
 
@@ -128,7 +136,7 @@ const PlayGame = ({
   return (
     <>
       <div>
-        {
+        {currentRound !== round && (
           <div className="border-2">
             <p>currentTeam: {currentTeam}</p>
             <div className="flex flex-row">
@@ -165,7 +173,7 @@ const PlayGame = ({
             </div>
 
             <div>
-              {gameStarted && <div>{WORD_BANK[wordIndex]?.text}</div>}
+              {gameStarted && <div>{words[wordIndex]?.text}</div>}
               <button
                 className="px-5 mx-2 border border-white hover:bg-amber-50 hover:text-black"
                 onClick={() => nextWordSkip()}
@@ -182,12 +190,11 @@ const PlayGame = ({
               <p>score : {gameStarted && data[currentTeam].score}</p>
             </div>
           </div>
-        }
+        )}
       </div>
       <WinGame data={data}></WinGame>
     </>
   );
 };
 
-
-export default PlayGame
+export default PlayGame;

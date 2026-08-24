@@ -1,32 +1,33 @@
-import { useEffect, useState} from "react";
-import type { Data } from "../types/data";
+import { useEffect, useState } from "react";
+import type { Data } from "../types/generalType";
 import lodash from "lodash";
 import PlayGame from "../routes/playGame/playGame";
 import { Link } from "react-router";
-import { usePantomimeStore } from "~/stores/gameData";
-
-
+import { usePageSetupStore } from "~/stores/pageSetupStore";
+import { usePlayGameStore } from "~/stores/playGameStore";
 
 const PageSetup = () => {
   //Main Data
-  const data = usePantomimeStore((s) => s.data);
+  const data = usePageSetupStore((s) => s.data);
 
   //Team detail
-  const teamName = usePantomimeStore((s) => s.teamName);
-  const setTeamName = usePantomimeStore((s) => s.setTeamName);
-  const addTeam = usePantomimeStore((s) => s.addTeam);
+  const teamName = usePageSetupStore((s) => s.teamName);
+  const setTeamName = usePageSetupStore((s) => s.setTeamName);
+  const addTeam = usePageSetupStore((s) => s.addTeam);
   //Player detail
-  const playerName = usePantomimeStore((s) => s.playerName);
-  const setPlayerName = usePantomimeStore((s) => s.setPlayerName);
-  const addPlayer = usePantomimeStore((s) => s.addPlayer);
+  const playerName = usePageSetupStore((s) => s.playerName);
+  const setPlayerName = usePageSetupStore((s) => s.setPlayerName);
+  const addPlayer = usePageSetupStore((s) => s.addPlayer);
 
   //Round detail
-  const setRound = usePantomimeStore((s) => s.setRound);
-  const round = usePantomimeStore((s) => s.round);
+  const setRound = usePageSetupStore((s) => s.setRound);
+  const round = usePageSetupStore((s) => s.round);
 
   //Time detail
-    const setTime = usePantomimeStore((s) => s.setTime);
-    const time = usePantomimeStore((s) => s.time);
+  const setTime = usePageSetupStore((s) => s.setTime);
+  const time = usePageSetupStore((s) => s.time);
+
+    const setGameTime = usePlayGameStore((s) => s.setGameTime);
 
 
   return (
@@ -175,6 +176,7 @@ const PageSetup = () => {
             : "text-gray-400 hover:bg-gray-400 hover:text-amber-100"
         }`}
         to={"./playgame"}
+        onClick={() => setGameTime(time)}
       >
         Start Game
       </Link>

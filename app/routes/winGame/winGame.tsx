@@ -1,4 +1,4 @@
-import type { Data } from "~/types/data";
+import type { Data } from "~/types/generalType";
 import lodash from "lodash";
 
 const WinGame = ({ data }: { data: Data[] }) => {
