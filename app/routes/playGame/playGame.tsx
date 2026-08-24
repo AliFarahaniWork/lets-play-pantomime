@@ -135,10 +135,10 @@ const PlayGame = () => {
 
   return (
     <>
-      <div>
+      <div className="mx-auto text-center">
         {currentRound !== round && (
           <div className="border-2">
-            <p>currentTeam: {currentTeam}</p>
+            <p>currentTeam: {data[currentTeam].teamName}</p>
             <div className="flex flex-row">
               {data.map((team: any, indexTeam: any) => {
                 return (
