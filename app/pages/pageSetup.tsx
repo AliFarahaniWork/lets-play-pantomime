@@ -8,22 +8,25 @@ import { usePantomimeStore } from "~/stores/gameData";
 
 
 const PageSetup = () => {
-
+  //Main Data
   const data = usePantomimeStore((s) => s.data);
-  const setTeamName = usePantomimeStore((s) => s.setTeamName);
-  const teamName = usePantomimeStore((s) => s.teamName);
 
+  //Team detail
+  const teamName = usePantomimeStore((s) => s.teamName);
+  const setTeamName = usePantomimeStore((s) => s.setTeamName);
+  const addTeam = usePantomimeStore((s) => s.addTeam);
+  //Player detail
   const playerName = usePantomimeStore((s) => s.playerName);
   const setPlayerName = usePantomimeStore((s) => s.setPlayerName);
-  const addTeam = usePantomimeStore((s) => s.addTeam);
-  const addPlayerName = usePantomimeStore((s) => s.addPlayerName);
-  console.log(data);
+  const addPlayer = usePantomimeStore((s) => s.addPlayer);
 
-  const [round, setRound] = useState<number>(0);
-  const [duration, setDuration] = useState(0);
-  const [score, setScore] = useState(0);
+  //Round detail
+  const setRound = usePantomimeStore((s) => s.setRound);
+  const round = usePantomimeStore((s) => s.round);
 
-
+  //Time detail
+    const setTime = usePantomimeStore((s) => s.setTime);
+    const time = usePantomimeStore((s) => s.time);
 
 
   return (
@@ -62,11 +65,11 @@ const PageSetup = () => {
                     className="border"
                     placeholder="Player Name"
                     value={playerName}
-                    onChange={(e) => addPlayerName(e.target.value)}
+                    onChange={(e) => setPlayerName(e.target.value)}
                   />
                   <button
                     className="border hover:bg-white hover:text-black hover:border-white"
-                    onClick={() => addPlayerName(indexTeam, playerName)}
+                    onClick={() => addPlayer(indexTeam, playerName)}
                   >
                     Player Name
                   </button>
@@ -125,41 +128,41 @@ const PageSetup = () => {
         <h2>Turn duration</h2>
         <button
           className={`px-5 mx-2 border border-white ${
-            duration === 30
+            time === 30
               ? "bg-white text-black"
               : "hover:bg-white hover:text-black"
           }`}
-          onClick={() => setDuration(30)}
+          onClick={() => setTime(30)}
         >
           30s
         </button>
         <button
           className={`px-5 mx-2 border border-white ${
-            duration === 60
+            time === 60
               ? "bg-white text-black"
               : "hover:bg-white hover:text-black"
           }`}
-          onClick={() => setDuration(60)}
+          onClick={() => setTime(60)}
         >
           60s
         </button>
         <button
           className={`px-5 mx-2 border border-white ${
-            duration === 90
+            time === 90
               ? "bg-white text-black"
               : "hover:bg-white hover:text-black"
           }`}
-          onClick={() => setDuration(90)}
+          onClick={() => setTime(90)}
         >
           90s
         </button>
         <button
           className={`px-5 mx-2 border border-white ${
-            duration === 150
+            time === 150
               ? "bg-white text-black"
               : "hover:bg-white hover:text-black"
           }`}
-          onClick={() => setDuration(150)}
+          onClick={() => setTime(150)}
         >
           150s
         </button>
@@ -167,15 +170,14 @@ const PageSetup = () => {
 
       <Link
         className={`px-5 mx-2 border border-gray-400 ${
-          duration && round && data[1]?.playerName[0]
-          ? "bg-white text-black"
-          : "text-gray-400 hover:bg-gray-400 hover:text-amber-100"
+          time && round && data[1]?.playerName[0]
+            ? "bg-white text-black"
+            : "text-gray-400 hover:bg-gray-400 hover:text-amber-100"
         }`}
         to={"./playgame"}
       >
         Start Game
       </Link>
-
     </div>
   );
 };

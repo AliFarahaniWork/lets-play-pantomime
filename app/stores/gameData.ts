@@ -172,14 +172,23 @@ type PantomimeStore = {
   data: Data[];
   setTeamName: (value: string) => void;
   setPlayerName: (value: string) => void;
-  addTeam: (teamName : string) => void;
-  addPlayerName: (index: number, playerName: string) => void;
+  addTeam: (teamName: string) => void;
+  addPlayer: (index: number, playerName: string) => void;
+  round: number;
+  setRound: (value: number) => void
+  time: number;
+  setTime: (value: number) => void
+  score: number;
+  setScore: (value : number) => void
 };
 export const usePantomimeStore = create<PantomimeStore>((set) => ({
   words: WORD_BANK,
   teamName: "",
   playerName: "",
   data: [],
+  round: 0,
+  time: 0,
+  score: 0,
   setTeamName: (value) => {
     set({ teamName: value });
   },
@@ -196,7 +205,7 @@ export const usePantomimeStore = create<PantomimeStore>((set) => ({
       data: [...state.data, team],
     }));
   },
-  addPlayerName: (index, playerName) => {
+  addPlayer: (index, playerName) => {
     set((state) => {
       const players = [...state.data];
       players[index].playerName.push(playerName);
@@ -205,4 +214,11 @@ export const usePantomimeStore = create<PantomimeStore>((set) => ({
       };
     });
   },
+  setRound: (value) => {
+    set({ round: value });
+  },
+  setTime: (value) => {
+    set({ time: value });
+  },
+  setScore:(value) => {}
 }));
