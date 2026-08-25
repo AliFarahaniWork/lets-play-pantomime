@@ -1,8 +1,10 @@
-import React, { useEffect, useState } from "react";
-import type { Data } from "~/types/generalType";
+import React, { useEffect } from "react";
 import WinGame from "../winGame/winGame";
 import { usePageSetupStore } from "~/stores/pageSetupStore";
 import { usePlayGameStore } from "~/stores/playGameStore";
+import { useNavigate } from "react-router";
+
+import { Link } from "react-router";
 
 const WORD_BANK = [
   {
@@ -30,6 +32,7 @@ const WORD_BANK = [
 ];
 
 const PlayGame = () => {
+  const navigate = useNavigate();
   //Main Data
   const data = usePageSetupStore((s) => s.data);
   const words = usePlayGameStore((s) => s.words);
@@ -39,6 +42,9 @@ const PlayGame = () => {
 
   //Time detail
   const time = usePageSetupStore((s) => s.time);
+
+  const gameTime = usePlayGameStore((s) => s.gameTime);
+  const setGameTime = usePlayGameStore((s) => s.setGameTime);
 
   //Index detail
   const currentTeam = usePlayGameStore((s) => s.currentTeam);
@@ -56,10 +62,8 @@ const PlayGame = () => {
   const gameStarted = usePlayGameStore((s) => s.gameStarted);
   const setGameStarted = usePlayGameStore((s) => s.setGameStarted);
 
-
-  const gameTime = usePlayGameStore((s) => s.gameTime);
-  const setGameTime = usePlayGameStore((s) => s.setGameTime);
-
+  //Score detail
+  const setScore = usePageSetupStore((s) => s.setScore);
 
   const choicePlayer = (index: number) => {
     return (
@@ -92,12 +96,14 @@ const PlayGame = () => {
         setCurrentRound(countCurrentRound);
         setCurrentTeam(0);
       }
-      setPlayerChoice(0);
       setGameStarted(false);
       setGameTime(time);
     };
-    if (gameStarted && gameTime === 0) {
+    if (gameStarted && gameTime === 0 && currentRound !== round) {
       nextTurn();
+    } else if ( currentRound === round)
+    {
+      navigate("/winner");
     }
   }, [gameTime, gameStarted]);
 
@@ -108,14 +114,14 @@ const PlayGame = () => {
   useEffect(() => {
     if (gameStarted) {
       const intervalId = setInterval(() => {
-        setGameTime((previousTime : number) => {
+        setGameTime((previousTime: number) => {
           if (previousTime > 0) {
             return previousTime - 1;
           }
 
           return time;
         });
-      }, 100);
+      }, 10);
 
       return () => {
         clearInterval(intervalId);
@@ -125,8 +131,7 @@ const PlayGame = () => {
 
   const nextWordCurrect = () => {
     setWordIndex(wordIndex + 1);
-    data[currentTeam].score = data[currentTeam]?.score + 1;
-    console.log(data[currentTeam]);
+    setScore(currentTeam, 1);
   };
 
   const nextWordSkip = () => {
@@ -136,63 +141,58 @@ const PlayGame = () => {
   return (
     <>
       <div className="mx-auto text-center">
-        {currentRound !== round && (
-          <div className="border-2">
-            <p>currentTeam: {data[currentTeam].teamName}</p>
-            <div className="flex flex-row">
-              {data.map((team: any, indexTeam: any) => {
-                return (
-                  <>
-                    <div className="flex flex-col" key={indexTeam}>
-                      <h1 className="text-3xl"> {team.teamName}</h1>
-                      <div className="">
-                        {team.playerName.map(
-                          (player: any, indexPlayer: any) => (
-                            <div key={indexPlayer}>
-                              {player}
-                              <div className="text-mist-300 text-2xl"></div>
-                            </div>
-                          ),
-                        )}
-                      </div>
+        <div className="border-2">
+          <p>currentTeam: {data[currentTeam].teamName}</p>
+          <div className="flex flex-row">
+            {data.map((team: any, indexTeam: any) => {
+              return (
+                <>
+                  <div className="flex flex-col" key={indexTeam}>
+                    <h1 className="text-3xl"> {team.teamName}</h1>
+                    <div className="">
+                      {team.playerName.map((player: any, indexPlayer: any) => (
+                        <div key={indexPlayer}>
+                          {player}
+                          <div className="text-mist-300 text-2xl"></div>
+                        </div>
+                      ))}
                     </div>
-                  </>
-                );
-              })}
-            </div>
-            <div>round : {round}</div>
-            <div>duration : {gameTime}s</div>
-
-            <div>currentTeam : {data[currentTeam]?.teamName}</div>
-            <div>currentRound :{currentRound}</div>
-
-            <div>{data[currentTeam] && choicePlayer(currentTeam)}</div>
-            <div>
-              turn player :
-              {data[currentTeam] && data[currentTeam]?.playerName[playerChoice]}
-            </div>
-
-            <div>
-              {gameStarted && <div>{words[wordIndex]?.text}</div>}
-              <button
-                className="px-5 mx-2 border border-white hover:bg-amber-50 hover:text-black"
-                onClick={() => nextWordSkip()}
-              >
-                Skip
-              </button>
-              <button
-                className="px-5 mx-2 border border-white hover:bg-amber-50 hover:text-black"
-                onClick={() => nextWordCurrect()}
-              >
-                Currect
-              </button>
-
-              <p>score : {gameStarted && data[currentTeam].score}</p>
-            </div>
+                  </div>
+                </>
+              );
+            })}
           </div>
-        )}
+          <div>round : {round}</div>
+          <div>duration : {gameTime}s</div>
+
+          <div>currentTeam : {data[currentTeam]?.teamName}</div>
+          <div>currentRound :{currentRound}</div>
+
+          <div>{data[currentTeam] && choicePlayer(currentTeam)}</div>
+          <div>
+            turn player :
+            {data[currentTeam] && data[currentTeam]?.playerName[playerChoice]}
+          </div>
+
+          <div>
+            {gameStarted && <div>{words[wordIndex]?.text}</div>}
+            <button
+              className="px-5 mx-2 border border-white hover:bg-amber-50 hover:text-black"
+              onClick={() => nextWordSkip()}
+            >
+              Skip
+            </button>
+            <button
+              className="px-5 mx-2 border border-white hover:bg-amber-50 hover:text-black"
+              onClick={() => nextWordCurrect()}
+            >
+              Currect
+            </button>
+
+            <p>score : {gameStarted && data[currentTeam].score}</p>
+          </div>
+        </div>
       </div>
-      <WinGame data={data}></WinGame>
     </>
   );
 };

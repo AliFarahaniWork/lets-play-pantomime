@@ -9,7 +9,6 @@ export const usePageSetupStore = create<PageSetupStore>((set) => ({
   data: [],
   round: 0,
   time: 0,
-  score: 0,
   setTeamName: (value) => {
     set({ teamName: value });
   },
@@ -41,5 +40,29 @@ export const usePageSetupStore = create<PageSetupStore>((set) => ({
   setTime: (value) => {
     set({ time: value });
   },
-  setScore:(value) => {}
+  setScore: (teamIndex, value) => {
+    set((state) => {
+      const newData = state.data.map((team, index) => {
+        if (index === teamIndex) {
+          return { ...team, score: team.score + value };
+        }
+        return team;
+      });
+      return { data: newData };
+    });
+  },
+  removeTeam: (teamIndex: number) => {
+    set((state) => ({
+      data: state.data.filter((_, index) => index !== teamIndex),
+    }));
+  },
+  removePlayer: (teamIndex, playerIndex) => {
+    set((state) => ({
+      data: state.data.map((team, index) =>
+        index === teamIndex
+          ? { ...team, playerName: team.playerName.filter((_, i) => i !== playerIndex) }
+          : team
+      )
+    }))
+  }
 }));

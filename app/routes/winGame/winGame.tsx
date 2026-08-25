@@ -1,11 +1,22 @@
-import type { Data } from "~/types/generalType";
+import type { Data } from "~/types/pageSetupType";
 import lodash from "lodash";
+import { usePageSetupStore } from "~/stores/pageSetupStore";
+import { usePlayGameStore } from "~/stores/playGameStore";
 
-const WinGame = ({ data }: { data: Data[] }) => {
+
+const WinGame = () => {
+
+    //Main Data
+    const data = usePageSetupStore((s) => s.data);
+
   const maxScore = lodash.maxBy(data, "score");
   return (
+    <div>
     <div className="mx-auto my-auto text-center">
-      winner is team : {maxScore?.teamName}
+      winner is team : <span className="text-4xl">{maxScore?.teamName}</span>
+      with : <span className="text-3xl">{maxScore?.score}</span>
+    </div>
+
     </div>
   );
 };

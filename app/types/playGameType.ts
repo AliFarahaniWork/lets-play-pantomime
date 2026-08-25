@@ -1,4 +1,8 @@
-import type { WordBank } from "~/types/generalType";
+
+export type WordBank = {
+  id: number;
+  text: string;
+};
 
 export type PlayGameStore = {
   words: WordBank[];

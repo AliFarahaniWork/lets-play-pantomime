@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
-import type { Data } from "../types/generalType";
+import type { Data } from "../types/pageSetupType";
 import lodash from "lodash";
 import PlayGame from "../routes/playGame/playGame";
 import { Link } from "react-router";
 import { usePageSetupStore } from "~/stores/pageSetupStore";
 import { usePlayGameStore } from "~/stores/playGameStore";
+import { index } from "@react-router/dev/routes";
 
 const PageSetup = () => {
   //Main Data
@@ -14,6 +15,7 @@ const PageSetup = () => {
   const teamName = usePageSetupStore((s) => s.teamName);
   const setTeamName = usePageSetupStore((s) => s.setTeamName);
   const addTeam = usePageSetupStore((s) => s.addTeam);
+
   //Player detail
   const playerName = usePageSetupStore((s) => s.playerName);
   const setPlayerName = usePageSetupStore((s) => s.setPlayerName);
@@ -27,7 +29,11 @@ const PageSetup = () => {
   const setTime = usePageSetupStore((s) => s.setTime);
   const time = usePageSetupStore((s) => s.time);
 
-    const setGameTime = usePlayGameStore((s) => s.setGameTime);
+  const setGameTime = usePlayGameStore((s) => s.setGameTime);
+
+  //Edit Function
+    const removeTeam = usePageSetupStore((s) => s.removeTeam);
+    const removePlayer = usePageSetupStore((s) => s.removePlayer);
 
 
   return (
@@ -52,11 +58,27 @@ const PageSetup = () => {
                   className="flex flex-col px-2.5 gap-5 mx-1.5 border border-white"
                   key={indexTeam}
                 >
-                  <h1 className="text-3xl"> {team.teamName}</h1>
+                  <h1 className="text-4xl">
+                    {team.teamName}
+                    <button
+                      className="text-xs border hover:bg-white hover:text-black hover:border-white"
+                      onClick={() => removeTeam(indexTeam)}
+                    >
+                      delete
+                    </button>
+                  </h1>
                   <div className="">
                     {team.playerName.map((player: any, indexPlayer: any) => (
                       <div key={indexPlayer}>
-                        <p className="border-white">{player}</p>
+                        <p className="border-white">
+                          {player}
+                          <button
+                            className="text-xs border hover:bg-white hover:text-black hover:border-white"
+                            onClick={() => removePlayer(indexTeam, indexPlayer)}
+                          >
+                            delete
+                          </button>
+                        </p>
                       </div>
                     ))}
                   </div>
@@ -171,11 +193,11 @@ const PageSetup = () => {
 
       <Link
         className={`px-5 mx-2 border border-gray-400 ${
-          time && round && data[1]?.playerName[0]
+          time && round && data[1]?.playerName
             ? "bg-white text-black"
             : "text-gray-400 hover:bg-gray-400 hover:text-amber-100"
         }`}
-        to={"./playgame"}
+        to={"./game"}
         onClick={() => setGameTime(time)}
       >
         Start Game

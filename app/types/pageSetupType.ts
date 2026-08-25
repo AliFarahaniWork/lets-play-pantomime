@@ -1,5 +1,8 @@
-import type { Data } from "~/types/generalType";
-
+export type Data = {
+  teamName: string;
+  playerName: string[];
+  score: number;
+};
 export type PageSetupStore = {
   teamName: string;
   playerName: string;
@@ -12,6 +15,7 @@ export type PageSetupStore = {
   setRound: (value: number) => void;
   time: number;
   setTime: (value: number) => void;
-  score: number;
-  setScore: (value: number) => void;
+  setScore: (teamIndex: number, value: number) => void;
+  removeTeam: (value: number) => void;
+  removePlayer: (valueOne: number , valueTwon: number) => void
 };
