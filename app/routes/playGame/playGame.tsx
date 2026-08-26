@@ -99,7 +99,7 @@ const PlayGame = () => {
     };
     if (gameStarted && gameTime === 0 && currentRound !== round) {
       nextTurn();
-    } else if ( currentRound === round)
+    } else if ( currentRound >= round)
     {
       navigate("/winner");
       console.log(data, gameStarted, currentRound, time , round);

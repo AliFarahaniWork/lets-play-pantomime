@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
-import type { Data } from "../types/pageSetupType";
+import type { Data } from "../../types/pageSetupType";
 import { Link } from "react-router";
 import { usePageSetupStore } from "~/stores/pageSetupStore";
 import { usePlayGameStore } from "~/stores/playGameStore";
-
 
 const PageSetup = () => {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
@@ -37,7 +36,6 @@ const PageSetup = () => {
   const removePlayer = usePageSetupStore((s) => s.removePlayer);
   const updateTeamName = usePageSetupStore((s) => s.updateTeamName);
 
-
   return (
     <div className="mx-auto text-center">
       <h1>PageSetup</h1>
@@ -50,7 +48,7 @@ const PageSetup = () => {
       <button
         className="button"
         onClick={() => {
-          (addTeam(teamName));
+          addTeam(teamName);
         }}
       >
         set team name
@@ -237,7 +235,7 @@ const PageSetup = () => {
             ? "bg-white text-black"
             : "text-gray-400 hover:bg-gray-400 hover:text-amber-100"
         }`}
-        to={"./game"}
+        to={"/game"}
         onClick={() => setGameTime(time)}
       >
         Start Game

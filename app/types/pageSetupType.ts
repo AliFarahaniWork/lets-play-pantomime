@@ -19,4 +19,6 @@ export type PageSetupStore = {
   removeTeam: (value: number) => void;
   removePlayer: (valueOne: number, valueTwon: number) => void;
   updateTeamName: (teamIndex: number, newTeamName: string) => void;
+  resetScore: () => void;
+  clearSetup: () => void;
 };

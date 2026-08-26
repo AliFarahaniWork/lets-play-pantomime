@@ -74,5 +74,19 @@ export const usePageSetupStore = create<PageSetupStore>((set) => ({
       )
       return {data: newData}
     })
+  },
+  resetScore: () => {
+    set((state) => ({
+      data: state.data.map((team) => ({ ...team , score: 0})),
+    }));
+  },
+  clearSetup: () => {
+    set({
+      teamName: "",
+      playerName: "",
+      data: [],
+      round: 0,
+      time: 0,
+    });
   }
 }));

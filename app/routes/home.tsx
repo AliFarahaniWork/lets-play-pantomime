@@ -1,5 +1,5 @@
-import PageSetup from "~/pages/pageSetup";
 import type { Route } from "./+types/home";
+import StartGame from "./start/startGame";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -9,5 +9,5 @@ export function meta({}: Route.MetaArgs) {
 }
 
 export default function Home() {
-  return <PageSetup/>;
+  return <StartGame />;
 }

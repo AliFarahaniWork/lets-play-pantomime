@@ -9,7 +9,7 @@ export default [
   index("routes/home.tsx"),
 
   // تنظیمات بازی
-  // route("/", "routes/pages/pageSetup.tsx"),
+  route("/setup", "routes/pageSetup/pageSetup.tsx"),
 
   // خود بازی
   route("/game", "routes/playGame/playGame.tsx"),

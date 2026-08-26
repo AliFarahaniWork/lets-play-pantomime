@@ -8,8 +8,6 @@ export type PlayGameStore = {
   words: WordBank[];
   currentTeam: number;
   setCurrentTeam: (value: number) => void;
-  score: number;
-  setScore: (value: number) => void;
   currentRound: number;
   setCurrentRound: (value: number) => void;
   playerChoice: number;
@@ -19,5 +17,6 @@ export type PlayGameStore = {
   gameStarted: boolean;
   setGameStarted: (value: boolean) => void;
   gameTime: number;
-  setGameTime: (value: number | ((previousTime : number) => number)) => void;
+  setGameTime: (value: number | ((previousTime: number) => number)) => void;
+  playAgain: () => void
 };
