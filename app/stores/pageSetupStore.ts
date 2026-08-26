@@ -64,5 +64,15 @@ export const usePageSetupStore = create<PageSetupStore>((set) => ({
           : team
       )
     }))
+  },
+  updateTeamName: (teamIndex: number, newTeamName: string) => {
+    set((state) => {
+      const newData = state.data.map((team, index) =>
+        index === teamIndex
+          ? { ...team, teamName: newTeamName }
+          : team
+      )
+      return {data: newData}
+    })
   }
 }));

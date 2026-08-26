@@ -1,10 +1,8 @@
 import React, { useEffect } from "react";
-import WinGame from "../winGame/winGame";
 import { usePageSetupStore } from "~/stores/pageSetupStore";
 import { usePlayGameStore } from "~/stores/playGameStore";
 import { useNavigate } from "react-router";
 
-import { Link } from "react-router";
 
 const WORD_BANK = [
   {
@@ -104,6 +102,7 @@ const PlayGame = () => {
     } else if ( currentRound === round)
     {
       navigate("/winner");
+      console.log(data, gameStarted, currentRound, time , round);
     }
   }, [gameTime, gameStarted]);
 

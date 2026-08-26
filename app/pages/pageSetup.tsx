@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
 import type { Data } from "../types/pageSetupType";
-import lodash from "lodash";
-import PlayGame from "../routes/playGame/playGame";
 import { Link } from "react-router";
 import { usePageSetupStore } from "~/stores/pageSetupStore";
 import { usePlayGameStore } from "~/stores/playGameStore";
-import { index } from "@react-router/dev/routes";
+
 
 const PageSetup = () => {
+  const [openIndex, setOpenIndex] = useState<number | null>(null);
+  const [tempValue, setTempValue] = useState("");
+
   //Main Data
   const data = usePageSetupStore((s) => s.data);
 
@@ -32,8 +33,9 @@ const PageSetup = () => {
   const setGameTime = usePlayGameStore((s) => s.setGameTime);
 
   //Edit Function
-    const removeTeam = usePageSetupStore((s) => s.removeTeam);
-    const removePlayer = usePageSetupStore((s) => s.removePlayer);
+  const removeTeam = usePageSetupStore((s) => s.removeTeam);
+  const removePlayer = usePageSetupStore((s) => s.removePlayer);
+  const updateTeamName = usePageSetupStore((s) => s.updateTeamName);
 
 
   return (
@@ -45,10 +47,15 @@ const PageSetup = () => {
         value={teamName}
         onChange={(e) => setTeamName(e.target.value)}
       />
-      <button className="button" onClick={() => addTeam(teamName)}>
+      <button
+        className="button"
+        onClick={() => {
+          (addTeam(teamName));
+        }}
+      >
         set team name
       </button>
-      <div className="flex flex-row gap-1.5 ">
+      <div className="flex flex-row gap-1.5 justify-center">
         {data.map((team: Data, indexTeam: number) => {
           return (
             <>
@@ -60,12 +67,41 @@ const PageSetup = () => {
                 >
                   <h1 className="text-4xl">
                     {team.teamName}
-                    <button
-                      className="text-xs border hover:bg-white hover:text-black hover:border-white"
-                      onClick={() => removeTeam(indexTeam)}
-                    >
-                      delete
-                    </button>
+                    <div className="flex flex-row justify-center">
+                      <button
+                        className="text-xs border hover:bg-white hover:text-black hover:border-white"
+                        onClick={() => {
+                          removeTeam(indexTeam);
+                        }}
+                      >
+                        delete
+                      </button>
+                      <button
+                        className="text-xs border hover:bg-white hover:text-black hover:border-white"
+                        onClick={() => {
+                          setOpenIndex(indexTeam);
+                          setTempValue(team.teamName);
+                        }}
+                      >
+                        edit
+                      </button>
+                      {openIndex === indexTeam && (
+                        <div>
+                          <input
+                            value={tempValue}
+                            onChange={(e) => setTempValue(e.target.value)}
+                          />
+                          <button
+                            onClick={() => {
+                              updateTeamName(indexTeam, tempValue);
+                              setOpenIndex(null);
+                            }}
+                          >
+                            ok
+                          </button>
+                        </div>
+                      )}
+                    </div>
                   </h1>
                   <div className="">
                     {team.playerName.map((player: any, indexPlayer: any) => (
@@ -86,6 +122,7 @@ const PageSetup = () => {
                 <div>
                   <input
                     className="border"
+
                     placeholder="Player Name"
                     value={playerName}
                     onChange={(e) => setPlayerName(e.target.value)}
@@ -193,7 +230,10 @@ const PageSetup = () => {
 
       <Link
         className={`px-5 mx-2 border border-gray-400 ${
-          time && round && data[1]?.playerName
+          time &&
+          round &&
+          data.length >= 2 &&
+          data.every((team) => team.playerName.length >= 1)
             ? "bg-white text-black"
             : "text-gray-400 hover:bg-gray-400 hover:text-amber-100"
         }`}
