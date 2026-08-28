@@ -3,31 +3,8 @@ import { usePageSetupStore } from "~/stores/pageSetupStore";
 import { usePlayGameStore } from "~/stores/playGameStore";
 import { useNavigate } from "react-router";
 
-
-const WORD_BANK = [
-  {
-    id: 1,
-    text: "spider man",
-  },
-  {
-    id: 2,
-    text: "pizza",
-  },
-  {
-    id: 3,
-    text: "swimmig",
-  },
-
-  {
-    id: 4,
-    text: "Elephant",
-  },
-
-  {
-    id: 5,
-    text: "Sleeping",
-  },
-];
+import { ChoicePlayer } from "~/components/play/choicePlayer";
+import { ListTeamPlayer } from "~/components/play/listTeamPlayer";
 
 const PlayGame = () => {
   const navigate = useNavigate();
@@ -45,17 +22,15 @@ const PlayGame = () => {
   const setGameTime = usePlayGameStore((s) => s.setGameTime);
 
   //Index detail
-  const currentTeam = usePlayGameStore((s) => s.currentTeam);
+  const currentTeamIndex = usePlayGameStore((s) => s.currentTeamIndex);
   const setCurrentTeam = usePlayGameStore((s) => s.setCurrentTeam);
 
   const currentRound = usePlayGameStore((s) => s.currentRound);
   const setCurrentRound = usePlayGameStore((s) => s.setCurrentRound);
 
   const playerChoice = usePlayGameStore((s) => s.playerChoice);
-  const setPlayerChoice = usePlayGameStore((s) => s.setPlayerChoice);
 
   const wordIndex = usePlayGameStore((s) => s.wordIndex);
-  const setWordIndex = usePlayGameStore((s) => s.setWordIndex);
 
   const gameStarted = usePlayGameStore((s) => s.gameStarted);
   const setGameStarted = usePlayGameStore((s) => s.setGameStarted);
@@ -63,32 +38,12 @@ const PlayGame = () => {
   //Score detail
   const setScore = usePageSetupStore((s) => s.setScore);
 
-  const choicePlayer = (index: number) => {
-    return (
-      <div>
-        {!gameStarted &&
-          data[index].playerName.map((player: string, indexPlayer: number) => {
-            return (
-              <button
-                className="px-5 mx-2 border border-white hover:bg-amber-50 hover:text-black"
-                key={indexPlayer}
-                onClick={() => {
-                  setPlayerChoice(indexPlayer);
-                  setGameStarted(true);
-                }}
-              >
-                {player}
-              </button>
-            );
-          })}
-      </div>
-    );
-  };
+  const nextWord = usePlayGameStore((s) => s.nextWord);
 
   useEffect(() => {
     const nextTurn = () => {
-      if (currentTeam < data.length - 1) {
-        setCurrentTeam(currentTeam + 1);
+      if (currentTeamIndex < data.length - 1) {
+        setCurrentTeam(currentTeamIndex + 1);
       } else {
         let countCurrentRound = currentRound + 1;
         setCurrentRound(countCurrentRound);
@@ -99,10 +54,9 @@ const PlayGame = () => {
     };
     if (gameStarted && gameTime === 0 && currentRound !== round) {
       nextTurn();
-    } else if ( currentRound >= round)
-    {
+    } else if (currentRound >= round) {
       navigate("/winner");
-      console.log(data, gameStarted, currentRound, time , round);
+      console.log(data, gameStarted, currentRound, time, round);
     }
   }, [gameTime, gameStarted]);
 
@@ -128,67 +82,67 @@ const PlayGame = () => {
     }
   }, [gameStarted]);
 
-  const nextWordCurrect = () => {
-    setWordIndex(wordIndex + 1);
-    setScore(currentTeam, 1);
-  };
-
-  const nextWordSkip = () => {
-    setWordIndex(wordIndex + 1);
-  };
-
   return (
     <>
       <div className="mx-auto text-center">
         <div className="border-2">
-          <p>currentTeam: {data[currentTeam].teamName}</p>
-          <div className="flex flex-row">
-            {data.map((team: any, indexTeam: any) => {
-              return (
-                <>
-                  <div className="flex flex-col" key={indexTeam}>
-                    <h1 className="text-3xl"> {team.teamName}</h1>
-                    <div className="">
-                      {team.playerName.map((player: any, indexPlayer: any) => (
-                        <div key={indexPlayer}>
-                          {player}
-                          <div className="text-mist-300 text-2xl"></div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </>
-              );
-            })}
-          </div>
+          <ListTeamPlayer />
+
           <div>round : {round}</div>
           <div>duration : {gameTime}s</div>
-
-          <div>currentTeam : {data[currentTeam]?.teamName}</div>
+          <div>currentTeam : {data[currentTeamIndex]?.teamName}</div>
           <div>currentRound :{currentRound}</div>
 
-          <div>{data[currentTeam] && choicePlayer(currentTeam)}</div>
+          <div>
+            {data[currentTeamIndex] && (
+              <ChoicePlayer currentTeamIndex={currentTeamIndex} />
+            )}
+          </div>
           <div>
             turn player :
-            {data[currentTeam] && data[currentTeam]?.playerName[playerChoice]}
+            {data[currentTeamIndex] &&
+              data[currentTeamIndex]?.playerName[playerChoice]}
           </div>
 
           <div>
-            {gameStarted && <div>{words[wordIndex]?.text}</div>}
+            {gameStarted && (
+              <div className="text-3xl">{words[wordIndex]?.text} </div>
+            )}
+
             <button
-              className="px-5 mx-2 border border-white hover:bg-amber-50 hover:text-black"
-              onClick={() => nextWordSkip()}
+              className={`px-5 mx-2 border ${
+                gameStarted
+                  ? "border border-white text-white hover:bg-white hover:text-black"
+                  : "text-gray-400 hover:bg-gray-400 hover:text-amber-100"
+              }`}
+              disabled={!gameStarted}
+
+              onClick={() => nextWord()}
             >
               Skip
             </button>
             <button
-              className="px-5 mx-2 border border-white hover:bg-amber-50 hover:text-black"
-              onClick={() => nextWordCurrect()}
+              className={`px-5 mx-2 border ${
+                gameStarted
+                  ? "border border-white text-white hover:bg-white hover:text-black"
+                  : "text-gray-400 hover:bg-gray-400 hover:text-amber-100"
+              }`}
+              onClick={() => {
+                (nextWord(), setScore(currentTeamIndex, 1));
+              }}
+              disabled={!gameStarted}
             >
               Currect
             </button>
 
-            <p>score : {gameStarted && data[currentTeam].score}</p>
+            <p>
+              team{" "}
+              <span className="text-3xl">
+                {data[currentTeamIndex]?.teamName}
+              </span>{" "}
+              score is{" "}
+              <span className="text-3xl">{data[currentTeamIndex]?.score} </span>
+            </p>
           </div>
         </div>
       </div>

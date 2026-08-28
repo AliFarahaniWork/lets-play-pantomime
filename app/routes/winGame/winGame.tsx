@@ -1,27 +1,18 @@
-import type { Data } from "~/types/pageSetupType";
-import lodash from "lodash";
 import { usePageSetupStore } from "~/stores/pageSetupStore";
 import { usePlayGameStore } from "~/stores/playGameStore";
 import { Link } from "react-router";
+import { WhoIsWin } from "~/components/game result/whoIsWin";
 
 
 const WinGame = () => {
 
-    //Main Data
-  const data = usePageSetupStore((s) => s.data);
-
   const playAgain = usePlayGameStore((s) => s.playAgain);
-
   const resetScore = usePageSetupStore((s) => s.resetScore);
-    const clearSetup = usePageSetupStore((s) => s.clearSetup);
+  const clearSetup = usePageSetupStore((s) => s.clearSetup);
 
-  const maxScore = lodash.maxBy(data, "score");
   return (
     <div className="relative min-h-screen">
-      <div className="mx-auto my-auto text-center">
-        winner is team : <span className="text-4xl">{maxScore?.teamName}</span>
-        with : <span className="text-3xl">{maxScore?.score}</span>
-      </div>
+      <WhoIsWin />
       <div className="absolute top-1/5 left-1/2 -translate-x-1/2">
         <Link
           className="mx-2 px-5 text-3xl border hover:bg-white hover:text-black hover:border-white"

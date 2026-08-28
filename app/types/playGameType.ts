@@ -2,11 +2,13 @@
 export type WordBank = {
   id: number;
   text: string;
+  category: string;
+  difficulty: "easy" | "medium" | "hard";
 };
 
 export type PlayGameStore = {
   words: WordBank[];
-  currentTeam: number;
+  currentTeamIndex: number;
   setCurrentTeam: (value: number) => void;
   currentRound: number;
   setCurrentRound: (value: number) => void;
@@ -18,5 +20,6 @@ export type PlayGameStore = {
   setGameStarted: (value: boolean) => void;
   gameTime: number;
   setGameTime: (value: number | ((previousTime: number) => number)) => void;
-  playAgain: () => void
+  nextWord: () => void;
+  playAgain: () => void;
 };

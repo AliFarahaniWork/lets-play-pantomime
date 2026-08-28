@@ -7,14 +7,14 @@ import { WORD_BANK } from "~/data/WORD_BANK";
 
 export const usePlayGameStore = create<PlayGameStore>((set) => ({
   words: WORD_BANK,
-  currentTeam: 0,
+  currentTeamIndex: 0,
   currentRound: 0,
   playerChoice: 0,
   wordIndex: 0,
   gameStarted: false,
   gameTime: 0,
   setCurrentTeam: (value) => {
-    set({ currentTeam: value });
+    set({ currentTeamIndex: value });
   },
   setCurrentRound: (value) => {
     set({ currentRound: value });
@@ -36,14 +36,19 @@ export const usePlayGameStore = create<PlayGameStore>((set) => ({
           : value,
     }));
   },
+  nextWord: () => {
+    set((state) => ({
+      wordIndex: state.wordIndex + 1,
+    }));
+  },
   playAgain: () => {
     set((state) => ({
       currentTeam: 0,
       currentRound: 0,
       gameStarted: false,
       gameTime: 0,
-      wordIndex: state.wordIndex + 1
-
+      wordIndex: state.wordIndex + 1,
     }));
-  }
+  },
+
 }));
