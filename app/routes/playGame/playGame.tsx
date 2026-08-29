@@ -86,7 +86,7 @@ const PlayGame = () => {
 
           return time;
         });
-      }, 100);
+      }, 1000);
 
       return () => {
         clearInterval(intervalId);
