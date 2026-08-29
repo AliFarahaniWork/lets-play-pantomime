@@ -10,10 +10,34 @@ export const RoundSelector = () => {
   const round = usePageSetupStore((s) => s.round);
 
   return (
-    <div className="mx-auto flex w-full max-w-[1080px] flex-col items-center gap-3 px-4">
+    <div
+      className="
+        mx-auto
+        flex
+        w-full
+        max-w-[1080px]
+        flex-col
+        items-center
+        gap-3
+        px-4
+
+        max-[480px]:px-0
+
+        md:px-4
+
+        lg:px-4
+      "
+    >
       <span className="text-sm font-medium text-gray-500">Round</span>
 
-      <ButtonGroup>
+      <ButtonGroup
+        className="
+          max-[480px]:flex
+          max-[480px]:w-full
+          max-[480px]:flex-wrap
+          max-[480px]:justify-center
+        "
+      >
         {ROUND.map((item) => (
           <Button
             key={item.id}
@@ -25,6 +49,12 @@ export const RoundSelector = () => {
               px-7
               transition-all
               duration-200
+
+              max-[480px]:px-4
+
+              md:px-7
+
+              lg:px-7
 
               ${
                 round === item.round

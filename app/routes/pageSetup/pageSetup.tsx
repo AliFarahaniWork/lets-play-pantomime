@@ -31,8 +31,42 @@ const PageSetup = () => {
   );
 
   return (
-    <main className="min-h-screen w-full bg-white px-4 py-10 text-black">
-      <div className="mx-auto flex w-full max-w-[1080px] flex-col items-center gap-8">
+    <main
+      className="
+        min-h-screen
+        w-full
+        bg-white
+        px-4
+        py-10
+        text-black
+
+        max-[480px]:px-3
+        max-[480px]:py-6
+
+        md:px-6
+        md:py-8
+
+        lg:px-4
+        lg:py-10
+      "
+    >
+      <div
+        className="
+          mx-auto
+          flex
+          w-full
+          max-w-[1080px]
+          flex-col
+          items-center
+          gap-8
+
+          max-[480px]:gap-6
+
+          md:gap-7
+
+          lg:gap-8
+        "
+      >
         {/* Set Round */}
         <RoundSelector />
 
@@ -54,6 +88,14 @@ const PageSetup = () => {
             border
             transition-all
             duration-200
+
+            max-[480px]:mt-2
+            max-[480px]:max-w-full
+
+            md:max-w-[300px]
+
+            lg:mt-4
+            lg:max-w-[270px]
 
             ${
               canPlay

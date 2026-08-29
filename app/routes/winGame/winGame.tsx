@@ -3,7 +3,7 @@ import { Link } from "react-router";
 import { usePageSetupStore } from "~/stores/pageSetupStore";
 import { usePlayGameStore } from "~/stores/playGameStore";
 
-import { WhoIsWin } from "~/components/game result/whoIsWin";
+import { WhoIsWin } from "~/components/gameResult/whoIsWin";
 
 const WinGame = () => {
   const playAgain = usePlayGameStore((s) => s.playAgain);
@@ -12,13 +12,68 @@ const WinGame = () => {
   const clearSetup = usePageSetupStore((s) => s.clearSetup);
 
   return (
-    <main className="min-h-screen w-full bg-white px-4 py-8 text-black">
-      <div className="mx-auto flex min-h-[80vh] w-full max-w-[600px] flex-col items-center justify-center">
+    <main
+      className="
+        min-h-screen
+        w-full
+        bg-white
+        px-4
+        py-8
+        text-black
+
+        max-[480px]:px-3
+        max-[480px]:py-4
+
+        md:px-6
+        md:py-6
+
+        lg:px-4
+        lg:py-8
+      "
+    >
+      <div
+        className="
+          mx-auto
+          flex
+          min-h-[80vh]
+          w-full
+          max-w-[600px]
+          flex-col
+          items-center
+          justify-center
+
+          max-[480px]:min-h-[70vh]
+
+          md:min-h-[75vh]
+
+          lg:min-h-[80vh]
+        "
+      >
         {/* Winner */}
         <WhoIsWin />
 
         {/* Actions */}
-        <div className="mt-12 flex w-full max-w-md flex-col gap-3 sm:flex-row">
+        <div
+          className="
+            mt-12
+            flex
+            w-full
+            max-w-md
+            flex-col
+            gap-3
+
+            max-[480px]:mt-8
+            max-[480px]:gap-2
+
+            md:mt-10
+            md:flex-row
+            md:gap-3
+
+            lg:mt-12
+            lg:flex-row
+            lg:gap-3
+          "
+        >
           {/* Restart */}
           <Link
             to="/setup"
@@ -43,6 +98,12 @@ const WinGame = () => {
               duration-200
               hover:bg-black
               hover:text-white
+
+              max-[480px]:w-full
+
+              md:w-auto
+
+              lg:w-auto
             "
           >
             Restart
@@ -73,6 +134,12 @@ const WinGame = () => {
               hover:border-black
               hover:bg-black
               hover:text-white
+
+              max-[480px]:w-full
+
+              md:w-auto
+
+              lg:w-auto
             "
           >
             Play Again

@@ -1,10 +1,13 @@
 import { useState } from "react";
 import { usePageSetupStore } from "~/stores/pageSetupStore";
 import type { Data } from "~/types/pageSetupType";
+
 import { Field, FieldGroup } from "~/components/ui/field";
 import { Input } from "~/components/ui/input";
 import { Button } from "~/components/ui/button";
+
 import { Item, ItemContent, ItemDescription } from "~/components/ui/item";
+
 import {
   Dialog,
   DialogContent,
@@ -19,7 +22,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 
 export const ShowTeamPlayerName = () => {
-  //Edit Team Name
+  // Edit Team Name
   const [openIndex, setOpenIndex] = useState<number | null>(null);
   const [tempValue, setTempValue] = useState("");
 
@@ -56,7 +59,28 @@ export const ShowTeamPlayerName = () => {
   const updateTeamName = usePageSetupStore((s) => s.updateTeamName);
 
   return (
-    <div className="mx-auto flex w-full max-w-[768px] flex-row flex-wrap justify-center gap-4 px-4">
+    <div
+      className="
+        mx-auto
+        flex
+        w-full
+        max-w-[768px]
+        flex-row
+        flex-wrap
+        justify-center
+        gap-4
+        px-4
+
+        max-[480px]:gap-2
+        max-[480px]:px-0
+
+        md:gap-4
+        md:px-4
+
+        lg:gap-4
+        lg:px-4
+      "
+    >
       {data.map((team: Data, indexTeam: number) => (
         <Dialog key={indexTeam}>
           {/* Team Item */}
@@ -69,9 +93,18 @@ export const ShowTeamPlayerName = () => {
               transition-all
               duration-200
               hover:border-[#FFAA0F]
+
+              max-[480px]:w-full
+              max-[480px]:min-w-0
+
+              md:w-auto
+              md:min-w-[150px]
+
+              lg:w-auto
+              lg:min-w-[150px]
             "
           >
-            <ItemContent className="items-center">
+            <ItemContent className="min-w-0 items-center">
               <DialogTrigger
                 render={
                   <Button
@@ -86,7 +119,7 @@ export const ShowTeamPlayerName = () => {
                       hover:text-white
                     "
                   >
-                    {team.teamName}
+                    <span className="min-w-0 break-words">{team.teamName}</span>
                   </Button>
                 }
               />
@@ -100,10 +133,24 @@ export const ShowTeamPlayerName = () => {
           {/* Dialog */}
           <DialogContent
             showCloseButton={true}
-            className="border-gray-300 bg-white text-black sm:max-w-md"
+            className="
+              border-gray-300
+              bg-white
+              text-black
+
+              max-[480px]:w-[calc(100%-24px)]
+              max-[480px]:max-w-none
+              max-[480px]:p-4
+
+              md:max-w-md
+
+              lg:max-w-md
+            "
           >
             <DialogHeader>
-              <DialogTitle className="text-xl">{team.teamName}</DialogTitle>
+              <DialogTitle className="break-words text-xl">
+                {team.teamName}
+              </DialogTitle>
 
               <DialogDescription>Manage team and players</DialogDescription>
             </DialogHeader>
@@ -150,10 +197,18 @@ export const ShowTeamPlayerName = () => {
             {openIndex === indexTeam && (
               <Field
                 orientation="horizontal"
-                className="flex-col gap-2 sm:flex-row"
+                className="
+                  flex-col
+                  gap-2
+
+                  md:flex-row
+
+                  lg:flex-row
+                "
               >
                 <Input
                   className="
+                    min-w-0
                     border-gray-300
                     focus-visible:border-[#FFAA0F]
                     focus-visible:ring-[#FFAA0F]/20
@@ -171,6 +226,12 @@ export const ShowTeamPlayerName = () => {
                       text-black
                       hover:bg-black
                       hover:text-white
+
+                      max-[480px]:w-full
+
+                      md:w-auto
+
+                      lg:w-auto
                     "
                     onClick={() => {
                       updateTeamName(indexTeam, tempValue);
@@ -194,32 +255,51 @@ export const ShowTeamPlayerName = () => {
               >
                 <Field
                   orientation="horizontal"
-                  className="w-full flex-col items-start gap-2 sm:flex-row"
+                  className="
+                    w-full
+                    flex-col
+                    items-start
+                    gap-2
+
+                    md:flex-row
+
+                    lg:flex-row
+                  "
                 >
                   <div className="w-full min-w-0 flex-1">
                     <Input
                       className="
-                                w-full
-                    border-gray-300
-                    focus-visible:border-[#FFAA0F]
-                    focus-visible:ring-[#FFAA0F]/20
-                  "
+                        w-full
+                        min-w-0
+                        border-gray-300
+                        focus-visible:border-[#FFAA0F]
+                        focus-visible:ring-[#FFAA0F]/20
+                      "
                       placeholder="Player Name"
                       {...registerPlayer("playerName")}
                     />
+
                     {playerErrors.playerName && (
                       <p className="mt-1 text-sm text-red-500">
                         {playerErrors.playerName.message}
                       </p>
                     )}
                   </div>
+
                   <Button
                     type="submit"
                     className="
+                      shrink-0
                       bg-[#FFAA0F]
                       text-black
                       hover:bg-black
                       hover:text-white
+
+                      max-[480px]:w-full
+
+                      md:w-auto
+
+                      lg:w-auto
                     "
                   >
                     Add Player
@@ -229,14 +309,16 @@ export const ShowTeamPlayerName = () => {
             </FieldGroup>
 
             {/* Players */}
-            <div className="flex flex-col gap-2">
+            <div className="flex w-full min-w-0 flex-col gap-2">
               {team.playerName.map((player: string, indexPlayer: number) => (
                 <div
                   key={indexPlayer}
                   className="
                       flex
+                      min-w-0
                       items-center
                       justify-between
+                      gap-2
                       rounded-md
                       border
                       border-gray-200
@@ -244,7 +326,7 @@ export const ShowTeamPlayerName = () => {
                       py-2
                     "
                 >
-                  <ItemDescription className="text-black">
+                  <ItemDescription className="min-w-0 break-words text-black">
                     {player}
                   </ItemDescription>
 
@@ -253,6 +335,7 @@ export const ShowTeamPlayerName = () => {
                     size="sm"
                     variant="outline"
                     className="
+                        shrink-0
                         text-xs
                         hover:border-black
                         hover:bg-black

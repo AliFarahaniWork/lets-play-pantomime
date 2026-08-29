@@ -19,12 +19,46 @@ export const ChoicePlayer = ({
   const gameStarted = usePlayGameStore((s) => s.gameStarted);
 
   return (
-    <div>
+    <div className="w-full">
       {!gameStarted && (
-        <div className="flex flex-col items-center gap-3">
-          <p className="text-sm text-gray-500">Choose Player</p>
+        <div
+          className="
+            flex
+            w-full
+            flex-col
+            items-center
+            gap-3
 
-          <div className="flex flex-row flex-wrap justify-center gap-2">
+            max-[480px]:gap-2
+
+            md:gap-3
+            lg:gap-3
+          "
+        >
+          <p
+            className="
+              text-sm
+              text-gray-500
+
+              max-[480px]:text-xs
+
+              md:text-sm
+              lg:text-sm
+            "
+          >
+            Choose Player
+          </p>
+
+          <div
+            className="
+              flex
+              w-full
+              flex-row
+              flex-wrap
+              justify-center
+              gap-2
+            "
+          >
             {data[currentTeamIndex]?.playerName.map(
               (player: string, indexPlayer: number) => (
                 <Button
@@ -34,23 +68,31 @@ export const ChoicePlayer = ({
                   onClick={() => {
                     setPlayerChoice(indexPlayer);
                   }}
-                  className={
-                    playerChoice === indexPlayer
-                      ? `
-                        border-[#FFAA0F]
-                        bg-[#FFAA0F]
-                        text-black
-                        hover:bg-[#FFAA0F]
-                        hover:text-black
-                      `
-                      : `
-                        border-black
-                        bg-white
-                        text-black
-                        hover:bg-black
-                        hover:text-white
-                      `
-                  }
+                  className={`
+                    max-[480px]:w-full
+                    max-[480px]:text-sm
+
+                    md:w-auto
+                    lg:w-auto
+
+                    ${
+                      playerChoice === indexPlayer
+                        ? `
+                          border-[#FFAA0F]
+                          bg-[#FFAA0F]
+                          text-black
+                          hover:bg-[#FFAA0F]
+                          hover:text-black
+                        `
+                        : `
+                          border-black
+                          bg-white
+                          text-black
+                          hover:bg-black
+                          hover:text-white
+                        `
+                    }
+                  `}
                 >
                   {player}
                 </Button>

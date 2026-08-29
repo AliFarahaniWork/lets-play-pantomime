@@ -30,9 +30,11 @@ export function InputTeamPlayerName() {
       teamName: "",
     },
   });
+
   type TeamForm = {
     teamName: string;
   };
+
   const onSubmit = (data: TeamForm) => {
     addTeam(data.teamName);
 
@@ -42,23 +44,46 @@ export function InputTeamPlayerName() {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="mx-auto w-full max-w-md px-4"
+      className="
+        mx-auto
+        w-full
+        max-w-md
+        px-4
+
+        max-[480px]:px-0
+
+        md:px-4
+
+        lg:px-4
+      "
     >
       <FieldGroup className="w-full">
         <Field className="flex flex-col gap-1">
-          <div className="flex w-full flex-col gap-2 sm:flex-row">
+          <div
+            className="
+              flex
+              w-full
+              flex-col
+              gap-2
+
+              md:flex-row
+
+              lg:flex-row
+            "
+          >
             <Input
               {...register("teamName")}
               id="fieldgroup-name"
               className="
-                  min-w-0
-                  flex-1
-                  border-gray-300
-                  focus-visible:border-[#FFAA0F]
-                  focus-visible:ring-[#FFAA0F]/20
-                "
+                min-w-0
+                flex-1
+                border-gray-300
+                focus-visible:border-[#FFAA0F]
+                focus-visible:ring-[#FFAA0F]/20
+              "
               placeholder="Team Name"
             />
+
             <Button
               type="submit"
               className="
@@ -72,11 +97,18 @@ export function InputTeamPlayerName() {
                 hover:border-black
                 hover:bg-black
                 hover:text-white
-            "
+
+                max-[480px]:w-full
+
+                md:w-auto
+
+                lg:w-auto
+              "
             >
               Add Team
             </Button>
           </div>
+
           {errors.teamName && (
             <p className="mt-1 text-sm text-red-500">
               {errors.teamName.message}
