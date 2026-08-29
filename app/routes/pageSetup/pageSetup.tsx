@@ -1,11 +1,12 @@
 import { usePageSetupStore } from "~/stores/pageSetupStore";
 import { usePlayGameStore } from "~/stores/playGameStore";
 
-import { InputTeamPlayerName } from "~/components/setup/inputTeamPlayerName";
+import {  InputTeamPlayerName } from "~/components/setup/inputTeamPlayerName";
 import { ShowTeamPlayerName } from "~/components/setup/ShowTeamPlayerName";
-import { RoundSelector } from "~/components/setup/roundSelected";
+import {  RoundSelector } from "~/components/setup/roundSelected";
 import { TimeSelector } from "~/components/setup/timeSelector";
 import { useNavigate } from "react-router";
+import { Button } from "~/components/ui/button";
 
 
 const PageSetup = () => {
@@ -29,29 +30,47 @@ const PageSetup = () => {
     data.every((team) => team.playerName.length >= 1);
 
   return (
-    <div className="mx-auto text-center">
-      <InputTeamPlayerName />
-      <ShowTeamPlayerName />
+    <div className="flex flex-col max-w-[1080] gap-8">
       <RoundSelector />
       <TimeSelector />
+      <InputTeamPlayerName />
+      <ShowTeamPlayerName />
+      <Button
+        className={`
+    mx-auto
+    w-full
+    max-w-[270px]
+    border
+    transition-all
+    duration-200
 
-      <button
-        className={`px-5 mx-2 border border-gray-400 ${
-          time &&
-          round &&
-          data.length >= 2 &&
-          data.every((team) => team.playerName.length >= 1)
-            ? "bg-white text-black"
-            : "text-gray-400 hover:bg-gray-400 hover:text-amber-100"
-          }`}
+    ${
+      canPlay
+        ? `
+          bg-[#FFAA0F]
+          text-black
+          border-[#FFAA0F]
+
+          hover:bg-black
+          hover:text-white
+          hover:border-black
+        `
+        : `
+          bg-gray-100
+          text-gray-400
+          border-gray-200
+          cursor-not-allowed
+        `
+    }
+  `}
         disabled={!canPlay}
         onClick={() => {
-          setGameTime(time),
-          navigate("/game")
+          setGameTime(time);
+          navigate("/game");
         }}
       >
         Start Game
-      </button>
+      </Button>{" "}
     </div>
   );
 };

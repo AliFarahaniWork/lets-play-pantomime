@@ -3,6 +3,16 @@ export type Data = {
   playerName: string[];
   score: number;
 };
+
+export type Duration = {
+  id: number;
+  time: number
+}
+
+export type Round = {
+  id: number;
+  round: number;
+}
 export type PageSetupStore = {
   teamName: string;
   playerName: string;
