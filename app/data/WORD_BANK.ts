@@ -1,4 +1,24 @@
 import type { WordBank } from "~/types/playGameType";
+export type Category = "action" | "animal" | "job" | "superhero" | "sport" | "object" | "food" | "character" | "place" | "entertainment"
+export type Difficulty = "easy" | "medium" | "hard";
+
+export const CATEGORY: Category[] = [
+  "action",
+  "animal",
+  "job",
+  "superhero",
+  "sport",
+  "object",
+  "food",
+  "character",
+  "place",
+  "entertainment",
+];
+export const DIFFICULTY: Difficulty[] = [
+  "easy",
+  "medium",
+  "hard"
+];
 
 export const WORD_BANK: WordBank[] = [
   // =========================

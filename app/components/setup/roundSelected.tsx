@@ -1,35 +1,55 @@
 import { ROUND } from "~/data/ROUND";
 import { usePageSetupStore } from "~/stores/pageSetupStore";
-import { Button } from "../ui/button";
+
+import { Button } from "~/components/ui/button";
 import { ButtonGroup } from "~/components/ui/button-group";
 
-export const RoundSelector = () =>{
-  //Round detail
+export const RoundSelector = () => {
+  // Round Detail
   const setRound = usePageSetupStore((s) => s.setRound);
   const round = usePageSetupStore((s) => s.round);
 
   return (
-    <div className="w-full max-w-[1080px] mx-auto px-4 flex flex-col items-center">
-      <span>Round</span>
+    <div className="mx-auto flex w-full max-w-[1080px] flex-col items-center gap-3 px-4">
+      <span className="text-sm font-medium text-gray-500">Round</span>
+
       <ButtonGroup>
-        {ROUND.map((item) => {
-          return (
-            <Button
-              size="lg"
-              variant="outline"
-              key={item.id}
-              className={` px-7 py-5 ${
+        {ROUND.map((item) => (
+          <Button
+            key={item.id}
+            type="button"
+            size="lg"
+            variant="outline"
+            onClick={() => setRound(item.round)}
+            className={`
+              px-7
+              transition-all
+              duration-200
+
+              ${
                 round === item.round
-                  ? "bg-[#ffaa0f] text-black"
-                  : "hover:bg-white hover:text-black"
-              }`}
-              onClick={() => setRound(item.round)}
-            >
-              {item.round}
-            </Button>
-          );
-        })}
+                  ? `
+                    border-[#FFAA0F]
+                    bg-[#FFAA0F]
+                    text-black
+                    hover:bg-[#FFAA0F]
+                    hover:text-black
+                  `
+                  : `
+                    border-gray-300
+                    bg-white
+                    text-black
+                    hover:border-black
+                    hover:bg-black
+                    hover:text-white
+                  `
+              }
+            `}
+          >
+            {item.round}
+          </Button>
+        ))}
       </ButtonGroup>
     </div>
   );
-}
+};

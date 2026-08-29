@@ -1,14 +1,10 @@
 import { useState } from "react";
-
 import { usePageSetupStore } from "~/stores/pageSetupStore";
 import type { Data } from "~/types/pageSetupType";
-
 import { Field, FieldGroup } from "~/components/ui/field";
 import { Input } from "~/components/ui/input";
 import { Button } from "~/components/ui/button";
-
 import { Item, ItemContent, ItemDescription } from "~/components/ui/item";
-
 import {
   Dialog,
   DialogContent,
@@ -18,16 +14,40 @@ import {
   DialogTrigger,
 } from "~/components/ui/dialog";
 
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+
 export const ShowTeamPlayerName = () => {
+  //Edit Team Name
   const [openIndex, setOpenIndex] = useState<number | null>(null);
   const [tempValue, setTempValue] = useState("");
+
+  // Hook Form
+  const playerSchema = yup.object({
+    playerName: yup.string().trim().required("Player name is required"),
+  });
+
+  type PlayerForm = {
+    playerName: string;
+  };
+
+  const {
+    register: registerPlayer,
+    handleSubmit: handlePlayerSubmit,
+    reset: resetPlayer,
+    formState: { errors: playerErrors },
+  } = useForm<PlayerForm>({
+    resolver: yupResolver(playerSchema),
+    defaultValues: {
+      playerName: "",
+    },
+  });
 
   // Main Data
   const data = usePageSetupStore((s) => s.data);
 
   // Player detail
-  const playerName = usePageSetupStore((s) => s.playerName);
-  const setPlayerName = usePageSetupStore((s) => s.setPlayerName);
   const addPlayer = usePageSetupStore((s) => s.addPlayer);
 
   // Edit Function
@@ -36,29 +56,54 @@ export const ShowTeamPlayerName = () => {
   const updateTeamName = usePageSetupStore((s) => s.updateTeamName);
 
   return (
-    <div className="mx-auto flex w-full max-w-[1080px] flex-row flex-wrap justify-center gap-6">
-      {" "}
+    <div className="mx-auto flex w-full max-w-[768px] flex-row flex-wrap justify-center gap-4 px-4">
       {data.map((team: Data, indexTeam: number) => (
         <Dialog key={indexTeam}>
           {/* Team Item */}
-          <Item variant="outline" className="w-auto">
-            <ItemContent>
+          <Item
+            variant="outline"
+            className="
+              w-auto
+              min-w-[150px]
+              border-gray-300
+              transition-all
+              duration-200
+              hover:border-[#FFAA0F]
+            "
+          >
+            <ItemContent className="items-center">
               <DialogTrigger
-                render={<Button variant="outline">{team.teamName}</Button>
-
+                render={
+                  <Button
+                    variant="outline"
+                    className="
+                      w-full
+                      border-gray-300
+                      bg-white
+                      text-black
+                      hover:border-black
+                      hover:bg-black
+                      hover:text-white
+                    "
+                  >
+                    {team.teamName}
+                  </Button>
                 }
               />
 
-              <ItemDescription>
+              <ItemDescription className="text-center">
                 {team.playerName.length} Players
               </ItemDescription>
             </ItemContent>
           </Item>
 
           {/* Dialog */}
-          <DialogContent showCloseButton={true}>
+          <DialogContent
+            showCloseButton={true}
+            className="border-gray-300 bg-white text-black sm:max-w-md"
+          >
             <DialogHeader>
-              <DialogTitle>{team.teamName}</DialogTitle>
+              <DialogTitle className="text-xl">{team.teamName}</DialogTitle>
 
               <DialogDescription>Manage team and players</DialogDescription>
             </DialogHeader>
@@ -68,6 +113,12 @@ export const ShowTeamPlayerName = () => {
               <Button
                 size="sm"
                 variant="outline"
+                className="
+                  border-gray-300
+                  hover:border-black
+                  hover:bg-black
+                  hover:text-white
+                "
                 onClick={() => {
                   removeTeam(indexTeam);
                 }}
@@ -78,6 +129,14 @@ export const ShowTeamPlayerName = () => {
               <Button
                 size="sm"
                 variant="outline"
+                className="
+                  border-[#FFAA0F]
+                  bg-[#FFAA0F]
+                  text-black
+                  hover:border-black
+                  hover:bg-black
+                  hover:text-white
+                "
                 onClick={() => {
                   setOpenIndex(indexTeam);
                   setTempValue(team.teamName);
@@ -94,7 +153,11 @@ export const ShowTeamPlayerName = () => {
                 className="flex-col gap-2 sm:flex-row"
               >
                 <Input
-                  className="border"
+                  className="
+                    border-gray-300
+                    focus-visible:border-[#FFAA0F]
+                    focus-visible:ring-[#FFAA0F]/20
+                  "
                   placeholder="Team Name"
                   value={tempValue}
                   onChange={(e) => setTempValue(e.target.value)}
@@ -103,6 +166,12 @@ export const ShowTeamPlayerName = () => {
                 <Field orientation="horizontal">
                   <Button
                     type="button"
+                    className="
+                      bg-[#FFAA0F]
+                      text-black
+                      hover:bg-black
+                      hover:text-white
+                    "
                     onClick={() => {
                       updateTeamName(indexTeam, tempValue);
                       setOpenIndex(null);
@@ -116,48 +185,84 @@ export const ShowTeamPlayerName = () => {
 
             {/* Add Player */}
             <FieldGroup className="w-full max-w-md">
-              <Field
-                orientation="horizontal"
-                className="flex-col gap-2 sm:flex-row"
+              <form
+                onSubmit={handlePlayerSubmit((formData) => {
+                  addPlayer(indexTeam, formData.playerName);
+                  resetPlayer();
+                })}
+                className="w-full"
               >
-                <Input
-                  className="border"
-                  placeholder="Player Name"
-                  value={playerName}
-                  onChange={(e) => setPlayerName(e.target.value)}
-                />
-
-                <Field orientation="horizontal">
+                <Field
+                  orientation="horizontal"
+                  className="w-full flex-col items-start gap-2 sm:flex-row"
+                >
+                  <div className="w-full min-w-0 flex-1">
+                    <Input
+                      className="
+                                w-full
+                    border-gray-300
+                    focus-visible:border-[#FFAA0F]
+                    focus-visible:ring-[#FFAA0F]/20
+                  "
+                      placeholder="Player Name"
+                      {...registerPlayer("playerName")}
+                    />
+                    {playerErrors.playerName && (
+                      <p className="mt-1 text-sm text-red-500">
+                        {playerErrors.playerName.message}
+                      </p>
+                    )}
+                  </div>
                   <Button
-                    type="button"
-                    className="border hover:bg-white hover:text-black hover:border-white"
-                    onClick={() => addPlayer(indexTeam, playerName)}
+                    type="submit"
+                    className="
+                      bg-[#FFAA0F]
+                      text-black
+                      hover:bg-black
+                      hover:text-white
+                    "
                   >
                     Add Player
                   </Button>
                 </Field>
-              </Field>
+              </form>
             </FieldGroup>
 
             {/* Players */}
-            <div>
+            <div className="flex flex-col gap-2">
               {team.playerName.map((player: string, indexPlayer: number) => (
-                <ItemDescription
+                <div
                   key={indexPlayer}
-                  className="flex items-center gap-2"
+                  className="
+                      flex
+                      items-center
+                      justify-between
+                      rounded-md
+                      border
+                      border-gray-200
+                      px-3
+                      py-2
+                    "
                 >
-                  {player}
+                  <ItemDescription className="text-black">
+                    {player}
+                  </ItemDescription>
 
                   <Button
                     type="button"
                     size="sm"
                     variant="outline"
-                    className="text-xs"
+                    className="
+                        text-xs
+                        hover:border-black
+                        hover:bg-black
+                        hover:text-white
+                      "
                     onClick={() => removePlayer(indexTeam, indexPlayer)}
                   >
                     Delete
                   </Button>
-                </ItemDescription>
+                </div>
               ))}
             </div>
           </DialogContent>
